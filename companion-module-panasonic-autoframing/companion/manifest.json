@@ -1,0 +1,26 @@
+{
+  "id": "panasonic-autoframing",
+  "name": "Panasonic Auto Framing",
+  "shortname": "AutoFrame",
+  "description": "Control Panasonic Media Production Suite Auto Framing Plugin",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": "git+https://github.com/bitfocus/companion-module-panasonic-autoframing.git",
+  "bugs": "https://github.com/bitfocus/companion-module-panasonic-autoframing/issues",
+  "maintainers": [
+    {
+      "name": "Companion Developer",
+      "email": "developer@example.com"
+    }
+  ],
+  "legacyIds": [],
+  "runtime": {
+    "type": "node22",
+    "api": "nodejs-ipc",
+    "apiVersion": "0.0.0",
+    "entrypoint": "../dist/main.js"
+  },
+  "manufacturer": "Panasonic",
+  "products": ["Media Production Suite", "Auto Framing Plugin"],
+  "keywords": ["panasonic", "auto framing", "camera", "tracking", "media production suite"]
+}
