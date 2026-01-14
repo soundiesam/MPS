@@ -33,6 +33,8 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         async init(config: ModuleConfig): Promise<void> {
                 this.config = config
 
+                this.log('info', `Initializing connection to ${config.host}:${config.port}`)
+
                 this.api = new PanasonicAutoFramingApi(config, (level, message) => {
                         this.log(level, message)
                 })
@@ -43,6 +45,7 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                 this.setVariableDefinitions(getVariableDefinitions())
 
                 this.updateStatus(InstanceStatus.Connecting)
+                this.log('info', `Starting connection to Media Production Suite at http://${config.host}:${config.port}`)
                 this.startPolling()
         }
 
@@ -126,10 +129,12 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                 } catch (error) {
                         this.consecutiveErrors++
                         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-                        this.log('debug', `Poll error (${this.consecutiveErrors}/${this.MAX_CONSECUTIVE_ERRORS}): ${errorMessage}`)
+                        this.log('warn', `Connection error (${this.consecutiveErrors}/${this.MAX_CONSECUTIVE_ERRORS}): ${errorMessage}`)
+                        this.log('info', `Trying to reach http://${this.config.host}:${this.config.port}/cgi-bin/auto_framing`)
 
                         if (this.consecutiveErrors >= this.MAX_CONSECUTIVE_ERRORS) {
-                                this.updateStatus(InstanceStatus.ConnectionFailure, errorMessage)
+                                this.updateStatus(InstanceStatus.ConnectionFailure, `Cannot connect to ${this.config.host}:${this.config.port}`)
+                                this.log('error', `Failed to connect after ${this.MAX_CONSECUTIVE_ERRORS} attempts. Check IP address and ensure Media Production Suite is running.`)
                         } else {
                                 this.updateStatus(InstanceStatus.Connecting, 'Retrying...')
                         }
