@@ -271,7 +271,7 @@ export class PanasonicAutoFramingApi {
                 return this.sendCommand('CurrentFrame', params)
         }
 
-        async getImageUrl(
+        getImageUrl(
                 category: 'CurrentFrame' | 'TargetFrame' | 'AdvancedPreset',
                 id: number,
                 number?: number
