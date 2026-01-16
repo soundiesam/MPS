@@ -6,6 +6,9 @@ import {
 } from '@companion-module/base'
 import { getConfigFields, type ModuleConfig } from './config.js'
 import { PanasonicAutoFramingApi, type FramingStateData } from './api.js'
+import { LicenseApi, type LicenseData } from './license-api.js'
+import { AutoTrackingApi, type CameraStateResponse } from './auto-tracking-api.js'
+import { VideoMixerApi } from './video-mixer-api.js'
 import { getActions } from './actions.js'
 import { getFeedbacks } from './feedbacks.js'
 import { getPresets } from './presets.js'
@@ -15,12 +18,21 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         public config: ModuleConfig = {
                 host: '192.168.0.200',
                 port: 1338,
+                mpsPort: 1337,
                 pollInterval: 1000,
                 cameraCount: 10,
         }
 
         public api: PanasonicAutoFramingApi | null = null
+        public licenseApi: LicenseApi | null = null
+        public autoTrackingApi: AutoTrackingApi | null = null
+        public videoMixerApi: VideoMixerApi | null = null
         public cameraStates: Map<number, FramingStateData> = new Map()
+        public autoTrackingStates: Map<number, CameraStateResponse> = new Map()
+        public licenseData: LicenseData[] = []
+        public videoMixerLayout: number = 1
+        public videoMixerPgmCell: number = 1
+        public videoMixerEnabled: boolean = false
         private pollTimer: ReturnType<typeof setInterval> | null = null
         private isPolling = false
         private consecutiveErrors = 0
@@ -35,9 +47,14 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
 
                 this.log('info', `Initializing connection to ${config.host}:${config.port}`)
 
-                this.api = new PanasonicAutoFramingApi(config, (level, message) => {
+                const logFn = (level: 'info' | 'warn' | 'error' | 'debug', message: string) => {
                         this.log(level, message)
-                })
+                }
+
+                this.api = new PanasonicAutoFramingApi(config, logFn)
+                this.licenseApi = new LicenseApi(config, logFn)
+                this.autoTrackingApi = new AutoTrackingApi(config, logFn)
+                this.videoMixerApi = new VideoMixerApi(config, logFn)
 
                 this.setActionDefinitions(getActions(this))
                 this.setFeedbackDefinitions(getFeedbacks(this))
@@ -52,7 +69,12 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         async destroy(): Promise<void> {
                 this.stopPolling()
                 this.api = null
+                this.licenseApi = null
+                this.autoTrackingApi = null
+                this.videoMixerApi = null
                 this.cameraStates.clear()
+                this.autoTrackingStates.clear()
+                this.licenseData = []
         }
 
         async configUpdated(config: ModuleConfig): Promise<void> {
@@ -60,6 +82,15 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
 
                 if (this.api) {
                         this.api.updateConfig(config)
+                }
+                if (this.licenseApi) {
+                        this.licenseApi.updateConfig(config)
+                }
+                if (this.autoTrackingApi) {
+                        this.autoTrackingApi.updateConfig(config)
+                }
+                if (this.videoMixerApi) {
+                        this.videoMixerApi.updateConfig(config)
                 }
 
                 this.stopPolling()

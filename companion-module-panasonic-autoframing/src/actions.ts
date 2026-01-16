@@ -1086,5 +1086,403 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                 instance.log('info', `GetImage URL: ${url}`)
                         },
                 },
+
+                getLicenseData: {
+                        name: 'License: Get License Data',
+                        description: 'Get license status of all paid plugins',
+                        options: [],
+                        callback: async () => {
+                                if (!instance.licenseApi) return
+                                try {
+                                        const response = await instance.licenseApi.getLicenseData()
+                                        if (response.Response === 'ack' && response.LicenseData) {
+                                                instance.licenseData = response.LicenseData
+                                                instance.log('info', `License data received: ${response.LicenseData.length} plugins`)
+                                                instance.checkFeedbacks()
+                                        }
+                                } catch (error) {
+                                        instance.log('error', `Failed to get license data: ${error}`)
+                                }
+                        },
+                },
+
+                atCameraControl: {
+                        name: 'Auto Tracking: Camera Control',
+                        description: 'Enable or disable Auto Tracking function for a camera',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'control',
+                                        label: 'Control',
+                                        choices: [
+                                                { id: 'start', label: 'Start (Enable)' },
+                                                { id: 'stop', label: 'Stop (Disable)' },
+                                        ],
+                                        default: 'start',
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const control = String(action.options.control) as 'start' | 'stop'
+                                await instance.autoTrackingApi?.cameraControl(cameraId, control)
+                        },
+                },
+
+                atTracking: {
+                        name: 'Auto Tracking: Tracking',
+                        description: 'Start or stop the tracking process',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'process',
+                                        label: 'Process',
+                                        choices: [
+                                                { id: 'start', label: 'Start' },
+                                                { id: 'stop', label: 'Stop' },
+                                        ],
+                                        default: 'start',
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const process = String(action.options.process) as 'start' | 'stop'
+                                await instance.autoTrackingApi?.tracking(cameraId, process)
+                        },
+                },
+
+                atAngle: {
+                        name: 'Auto Tracking: Angle',
+                        description: 'Set camera angle mode during auto tracking',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Angle Mode',
+                                        choices: [
+                                                { id: 'upper', label: 'Upper Body' },
+                                                { id: 'body', label: 'Full Body' },
+                                                { id: 'full', label: 'Full Shot' },
+                                                { id: 'off', label: 'Off' },
+                                        ],
+                                        default: 'upper',
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const mode = String(action.options.mode) as 'upper' | 'body' | 'full' | 'off'
+                                await instance.autoTrackingApi?.angle(cameraId, mode)
+                        },
+                },
+
+                atCameraState: {
+                        name: 'Auto Tracking: Get Camera State',
+                        description: 'Get the auto tracking state of a camera',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                        ],
+                        callback: async (action) => {
+                                if (!instance.autoTrackingApi) return
+                                const cameraId = Number(action.options.camera_id)
+                                try {
+                                        const response = await instance.autoTrackingApi.cameraState(cameraId)
+                                        if (response.resp === 'ack') {
+                                                instance.autoTrackingStates.set(cameraId, response)
+                                                instance.log('info', `Camera ${cameraId} state: tracking=${response.tracking}, detection=${response.detection}`)
+                                                instance.checkFeedbacks()
+                                        }
+                                } catch (error) {
+                                        instance.log('error', `Failed to get camera state: ${error}`)
+                                }
+                        },
+                },
+
+                atTrackingControl: {
+                        name: 'Auto Tracking: Tracking Control',
+                        description: 'Start or stop tracking (alternative command)',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'enable',
+                                        label: 'Enable',
+                                        choices: [
+                                                { id: 'on', label: 'On' },
+                                                { id: 'off', label: 'Off' },
+                                        ],
+                                        default: 'on',
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const enable = String(action.options.enable) as 'on' | 'off'
+                                await instance.autoTrackingApi?.trackingControl(cameraId, enable)
+                        },
+                },
+
+                atAutoFaceSearch: {
+                        name: 'Auto Tracking: Auto Face Search',
+                        description: 'Enable or disable Auto Face Search',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 1, label: 'Enable' },
+                                                { id: 0, label: 'Disable' },
+                                        ],
+                                        default: 1,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const mode = Number(action.options.mode) as 0 | 1
+                                await instance.autoTrackingApi?.autoFaceSearch(cameraId, mode)
+                        },
+                },
+
+                atPreset: {
+                        name: 'Auto Tracking: Preset',
+                        description: 'Set, clear, or recall a camera preset',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'camera_id',
+                                        label: 'Camera',
+                                        choices: cameraIdChoices,
+                                        default: 1,
+                                },
+                                {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 'recall', label: 'Recall' },
+                                                { id: 'set', label: 'Set' },
+                                                { id: 'clear', label: 'Clear' },
+                                        ],
+                                        default: 'recall',
+                                },
+                                {
+                                        type: 'number',
+                                        id: 'preset_num',
+                                        label: 'Preset Number (1-100)',
+                                        default: 1,
+                                        min: 1,
+                                        max: 100,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cameraId = Number(action.options.camera_id)
+                                const mode = String(action.options.mode) as 'set' | 'clear' | 'recall'
+                                const presetNum = Number(action.options.preset_num)
+                                await instance.autoTrackingApi?.preset(cameraId, mode, presetNum)
+                        },
+                },
+
+                vmSwitchPgm: {
+                        name: 'Video Mixer: Switch PGM',
+                        description: 'Switch PGM to a specific cell',
+                        options: [
+                                {
+                                        type: 'number',
+                                        id: 'cell',
+                                        label: 'Cell Number (1-14, where 13=A, 14=B)',
+                                        default: 1,
+                                        min: 1,
+                                        max: 14,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const cell = Number(action.options.cell)
+                                await instance.videoMixerApi?.switchPgm(cell)
+                        },
+                },
+
+                vmDsk: {
+                        name: 'Video Mixer: DSK Control',
+                        description: 'Turn Down Stream Key on or off',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'control',
+                                        label: 'Control',
+                                        choices: [
+                                                { id: 1, label: 'On' },
+                                                { id: 0, label: 'Off' },
+                                        ],
+                                        default: 1,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const control = Number(action.options.control) as 0 | 1
+                                await instance.videoMixerApi?.dsk(control)
+                        },
+                },
+
+                vmCaptureScreenshot: {
+                        name: 'Video Mixer: Capture Screenshot',
+                        description: 'Capture PGM or KEY image',
+                        options: [
+                                {
+                                        type: 'dropdown',
+                                        id: 'control',
+                                        label: 'Capture Type',
+                                        choices: [
+                                                { id: 1, label: 'PGM Video' },
+                                                { id: 2, label: 'KEY Video' },
+                                        ],
+                                        default: 1,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const control = Number(action.options.control) as 1 | 2
+                                await instance.videoMixerApi?.captureScreenshot(control, 0)
+                        },
+                },
+
+                vmCaptureAiBackground: {
+                        name: 'Video Mixer: Capture AI Background',
+                        description: 'Capture background image for AI Keying',
+                        options: [
+                                {
+                                        type: 'number',
+                                        id: 'input',
+                                        label: 'Input Number (1-4)',
+                                        default: 1,
+                                        min: 1,
+                                        max: 4,
+                                },
+                                {
+                                        type: 'number',
+                                        id: 'bkgd',
+                                        label: 'Background Number (1-4)',
+                                        default: 1,
+                                        min: 1,
+                                        max: 4,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const input = Number(action.options.input)
+                                const bkgd = Number(action.options.bkgd)
+                                await instance.videoMixerApi?.captureAiBackground(input, bkgd)
+                        },
+                },
+
+                vmGetMultiViewLayout: {
+                        name: 'Video Mixer: Get Multi View Layout',
+                        description: 'Get current Multi View layout setting',
+                        options: [],
+                        callback: async () => {
+                                if (!instance.videoMixerApi) return
+                                try {
+                                        const response = await instance.videoMixerApi.getMultiViewLayout()
+                                        if (response.resp === 'ack' && response.layout !== undefined) {
+                                                instance.videoMixerLayout = response.layout
+                                                instance.log('info', `Multi View Layout: ${response.layout}`)
+                                                instance.checkFeedbacks()
+                                        }
+                                } catch (error) {
+                                        instance.log('error', `Failed to get layout: ${error}`)
+                                }
+                        },
+                },
+
+                vmGetPgmCell: {
+                        name: 'Video Mixer: Get PGM Cell',
+                        description: 'Get current PGM selection cell',
+                        options: [],
+                        callback: async () => {
+                                if (!instance.videoMixerApi) return
+                                try {
+                                        const response = await instance.videoMixerApi.getPgmCell()
+                                        if (response.resp === 'ack' && response.cell !== undefined) {
+                                                instance.videoMixerPgmCell = response.cell
+                                                instance.log('info', `PGM Cell: ${response.cell}`)
+                                                instance.checkFeedbacks()
+                                        }
+                                } catch (error) {
+                                        instance.log('error', `Failed to get PGM cell: ${error}`)
+                                }
+                        },
+                },
+
+                vmControlVolume: {
+                        name: 'Video Mixer: Control Volume',
+                        description: 'Set output audio volume',
+                        options: [
+                                {
+                                        type: 'number',
+                                        id: 'volume',
+                                        label: 'Volume (0-100)',
+                                        default: 100,
+                                        min: 0,
+                                        max: 100,
+                                },
+                        ],
+                        callback: async (action) => {
+                                const volume = Number(action.options.volume)
+                                await instance.videoMixerApi?.controlVolume(volume)
+                        },
+                },
+
+                vmGetVmEnableStatus: {
+                        name: 'Video Mixer: Get Enable Status',
+                        description: 'Get Video Mixer enable status',
+                        options: [],
+                        callback: async () => {
+                                if (!instance.videoMixerApi) return
+                                try {
+                                        const response = await instance.videoMixerApi.getVmEnableStatus()
+                                        if (response.resp === 'ack' && response.enable !== undefined) {
+                                                instance.videoMixerEnabled = response.enable === 1
+                                                instance.log('info', `Video Mixer Enabled: ${instance.videoMixerEnabled}`)
+                                                instance.checkFeedbacks()
+                                        }
+                                } catch (error) {
+                                        instance.log('error', `Failed to get VM status: ${error}`)
+                                }
+                        },
+                },
         }
 }

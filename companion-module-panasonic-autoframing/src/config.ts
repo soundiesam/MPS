@@ -3,6 +3,7 @@ import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 export interface ModuleConfig {
         host: string
         port: number
+        mpsPort: number
         pollInterval: number
         cameraCount: number
 }
@@ -13,20 +14,30 @@ export function getConfigFields(): SomeCompanionConfigField[] {
                         type: 'textinput',
                         id: 'host',
                         label: 'IP Address',
-                        width: 8,
+                        width: 12,
                         regex: Regex.IP,
                         default: '192.168.0.200',
-                        tooltip: 'IP address of the PC running Media Production Suite Auto Framing Plugin',
+                        tooltip: 'IP address of the PC running Media Production Suite',
                 },
                 {
                         type: 'number',
                         id: 'port',
-                        label: 'Port',
+                        label: 'Auto Framing Port',
                         width: 4,
                         default: 1338,
                         min: 1,
                         max: 65535,
-                        tooltip: 'Port number (default: 1338)',
+                        tooltip: 'Auto Framing Plugin port (default: 1338)',
+                },
+                {
+                        type: 'number',
+                        id: 'mpsPort',
+                        label: 'MPS Port',
+                        width: 4,
+                        default: 1337,
+                        min: 1,
+                        max: 65535,
+                        tooltip: 'Media Production Suite port for License, Video Mixer, Auto Tracking (default: 1337)',
                 },
                 {
                         type: 'number',
@@ -46,7 +57,7 @@ export function getConfigFields(): SomeCompanionConfigField[] {
                         default: 10,
                         min: 1,
                         max: 100,
-                        tooltip: 'Maximum number of cameras to poll when fallback mode is used',
+                        tooltip: 'Maximum number of cameras to poll',
                 },
         ]
 }
