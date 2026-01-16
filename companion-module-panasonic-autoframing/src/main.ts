@@ -12,7 +12,7 @@ import { VideoMixerApi } from './video-mixer-api.js'
 import { getActions } from './actions.js'
 import { getFeedbacks } from './feedbacks.js'
 import { getPresets } from './presets.js'
-import { getVariableDefinitions, updateVariablesFromState } from './variables.js'
+import { getVariableDefinitions, updateVariablesFromState, updateVariablesFromAutoTracking, updateVideoMixerVariables, updateLicenseVariables } from './variables.js'
 
 export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         public config: ModuleConfig = {
@@ -33,10 +33,13 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         public videoMixerLayout: number = 1
         public videoMixerPgmCell: number = 1
         public videoMixerEnabled: boolean = false
+        public videoMixerVolume: number = 100
         private pollTimer: ReturnType<typeof setInterval> | null = null
         private isPolling = false
         private consecutiveErrors = 0
+        private pollCycleCount = 0
         private readonly MAX_CONSECUTIVE_ERRORS = 5
+        private readonly MPS_POLL_INTERVAL = 5
 
         constructor(internal: unknown) {
                 super(internal as ConstructorParameters<typeof InstanceBase<ModuleConfig>>[0])
@@ -106,11 +109,82 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         private startPolling(): void {
                 this.stopPolling()
 
-                this.pollCameraStates()
+                this.pollCycleCount = 0
+                this.pollAllStates()
 
                 this.pollTimer = setInterval(() => {
-                        this.pollCameraStates()
+                        this.pollAllStates()
                 }, this.config.pollInterval)
+        }
+
+        private async pollAllStates(): Promise<void> {
+                this.pollCycleCount++
+
+                await this.pollCameraStates()
+
+                if (this.pollCycleCount % this.MPS_POLL_INTERVAL === 0) {
+                        await this.pollMpsServices()
+                }
+        }
+
+        private async pollMpsServices(): Promise<void> {
+                try {
+                        if (this.videoMixerApi) {
+                                const vmEnabled = await this.videoMixerApi.getVmEnableStatus()
+                                if (vmEnabled.resp === 'ack' && vmEnabled.enable !== undefined) {
+                                        this.videoMixerEnabled = vmEnabled.enable === 1
+                                }
+
+                                if (this.videoMixerEnabled) {
+                                        const pgmResponse = await this.videoMixerApi.getPgmCell()
+                                        if (pgmResponse.resp === 'ack' && pgmResponse.cell !== undefined) {
+                                                this.videoMixerPgmCell = pgmResponse.cell
+                                        }
+
+                                        const layoutResponse = await this.videoMixerApi.getMultiViewLayout()
+                                        if (layoutResponse.resp === 'ack' && layoutResponse.layout !== undefined) {
+                                                this.videoMixerLayout = layoutResponse.layout
+                                        }
+
+                                        const volumeResponse = await this.videoMixerApi.getAudioVolume()
+                                        if (volumeResponse.resp === 'ack' && volumeResponse.volume !== undefined) {
+                                                this.videoMixerVolume = volumeResponse.volume
+                                        }
+                                }
+
+                                const vmVariables = updateVideoMixerVariables(this.videoMixerPgmCell, this.videoMixerLayout, this.videoMixerEnabled, this.videoMixerVolume)
+                                this.setVariableValues(vmVariables)
+                        }
+
+                        if (this.licenseApi) {
+                                const licenseResponse = await this.licenseApi.getLicenseData()
+                                if (licenseResponse.Response === 'ack' && licenseResponse.LicenseData) {
+                                        this.licenseData = licenseResponse.LicenseData
+                                        const licenseVariables = updateLicenseVariables(this.licenseData)
+                                        this.setVariableValues(licenseVariables)
+                                }
+                        }
+
+                        if (this.autoTrackingApi) {
+                                const maxCameras = this.config.cameraCount ?? 10
+                                for (let cameraId = 1; cameraId <= maxCameras; cameraId++) {
+                                        try {
+                                                const response = await this.autoTrackingApi.cameraState(cameraId)
+                                                if (response.resp === 'ack') {
+                                                        this.autoTrackingStates.set(cameraId, response)
+                                                        const variables = updateVariablesFromAutoTracking(cameraId, response)
+                                                        this.setVariableValues(variables)
+                                                }
+                                        } catch {
+                                                this.log('debug', `Failed to poll Auto Tracking camera ${cameraId}`)
+                                        }
+                                }
+                        }
+
+                        this.checkFeedbacks()
+                } catch (error) {
+                        this.log('debug', `MPS services poll error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+                }
         }
 
         private stopPolling(): void {

@@ -97,6 +97,10 @@ export function getVariableDefinitions(): CompanionVariableDefinition[] {
                         name: 'Video Mixer Enabled',
                 },
                 {
+                        variableId: 'vm_volume',
+                        name: 'Video Mixer Volume',
+                },
+                {
                         variableId: 'license_autoframing',
                         name: 'Auto Framing License Status',
                 },
@@ -193,12 +197,16 @@ export function updateVariablesFromAutoTracking(cameraId: number, state: CameraS
         return values
 }
 
-export function updateVideoMixerVariables(pgmCell: number, layout: number, enabled: boolean): CompanionVariableValues {
-        return {
+export function updateVideoMixerVariables(pgmCell: number, layout: number, enabled: boolean, volume?: number): CompanionVariableValues {
+        const values: CompanionVariableValues = {
                 vm_pgm_cell: pgmCell,
                 vm_layout: layout,
                 vm_enabled: enabled ? 'Enabled' : 'Disabled',
         }
+        if (volume !== undefined) {
+                values.vm_volume = volume
+        }
+        return values
 }
 
 export function updateLicenseVariables(licenseData: LicenseData[]): CompanionVariableValues {
