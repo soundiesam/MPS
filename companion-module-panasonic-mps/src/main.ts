@@ -129,9 +129,11 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
 
         private async pollMpsServices(): Promise<void> {
                 let mpsConnected = false
+                this.log('debug', 'Polling MPS services...')
 
                 try {
                         if (this.videoMixerApi) {
+                                this.log('debug', 'Polling Video Mixer API...')
                                 const vmEnabled = await this.videoMixerApi.getVmEnableStatus()
                                 if (vmEnabled.resp === 'ack' && vmEnabled.enable !== undefined) {
                                         this.videoMixerEnabled = vmEnabled.enable === 1
