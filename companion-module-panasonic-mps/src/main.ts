@@ -138,21 +138,21 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                         mpsConnected = true
                                 }
 
-                                if (this.videoMixerEnabled) {
-                                        const pgmResponse = await this.videoMixerApi.getPgmCell()
-                                        if (pgmResponse.resp === 'ack' && pgmResponse.cell !== undefined) {
-                                                this.videoMixerPgmCell = pgmResponse.cell
-                                        }
+                                const pgmResponse = await this.videoMixerApi.getPgmCell()
+                                if (pgmResponse.resp === 'ack' && pgmResponse.cell !== undefined) {
+                                        this.videoMixerPgmCell = pgmResponse.cell
+                                        this.log('debug', `Video Mixer PGM Cell: ${this.videoMixerPgmCell}`)
+                                        mpsConnected = true
+                                }
 
-                                        const layoutResponse = await this.videoMixerApi.getMultiViewLayout()
-                                        if (layoutResponse.resp === 'ack' && layoutResponse.layout !== undefined) {
-                                                this.videoMixerLayout = layoutResponse.layout
-                                        }
+                                const layoutResponse = await this.videoMixerApi.getMultiViewLayout()
+                                if (layoutResponse.resp === 'ack' && layoutResponse.layout !== undefined) {
+                                        this.videoMixerLayout = layoutResponse.layout
+                                }
 
-                                        const volumeResponse = await this.videoMixerApi.getAudioVolume()
-                                        if (volumeResponse.resp === 'ack' && volumeResponse.volume !== undefined) {
-                                                this.videoMixerVolume = volumeResponse.volume
-                                        }
+                                const volumeResponse = await this.videoMixerApi.getAudioVolume()
+                                if (volumeResponse.resp === 'ack' && volumeResponse.volume !== undefined) {
+                                        this.videoMixerVolume = volumeResponse.volume
                                 }
 
                                 const vmVariables = updateVideoMixerVariables(this.videoMixerPgmCell, this.videoMixerLayout, this.videoMixerEnabled, this.videoMixerVolume)
