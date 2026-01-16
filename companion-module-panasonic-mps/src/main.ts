@@ -139,9 +139,13 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                 }
 
                                 const pgmResponse = await this.videoMixerApi.getPgmCell()
+                                this.log('debug', `Video Mixer PGM Response: ${JSON.stringify(pgmResponse)}`)
                                 if (pgmResponse.resp === 'ack' && pgmResponse.cell !== undefined) {
-                                        this.videoMixerPgmCell = pgmResponse.cell
-                                        this.log('debug', `Video Mixer PGM Cell: ${this.videoMixerPgmCell}`)
+                                        const newCell = pgmResponse.cell
+                                        if (this.videoMixerPgmCell !== newCell) {
+                                                this.log('info', `Video Mixer PGM Cell changed: ${this.videoMixerPgmCell} -> ${newCell}`)
+                                        }
+                                        this.videoMixerPgmCell = newCell
                                         mpsConnected = true
                                 }
 
@@ -191,7 +195,7 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                 this.updateStatus(InstanceStatus.Ok)
                         }
 
-                        this.checkFeedbacks()
+                        this.checkFeedbacks('vmPgmCell', 'vmEnabled', 'atTracking', 'atCameraConnected')
                 } catch (error) {
                         this.log('debug', `MPS services poll error: ${error instanceof Error ? error.message : 'Unknown error'}`)
                 }
