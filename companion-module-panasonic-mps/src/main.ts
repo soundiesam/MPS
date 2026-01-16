@@ -122,17 +122,20 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
 
                 await this.pollCameraStates()
 
-                if (this.pollCycleCount % this.MPS_POLL_INTERVAL === 0) {
+                if (this.pollCycleCount === 1 || this.pollCycleCount % this.MPS_POLL_INTERVAL === 0) {
                         await this.pollMpsServices()
                 }
         }
 
         private async pollMpsServices(): Promise<void> {
+                let mpsConnected = false
+
                 try {
                         if (this.videoMixerApi) {
                                 const vmEnabled = await this.videoMixerApi.getVmEnableStatus()
                                 if (vmEnabled.resp === 'ack' && vmEnabled.enable !== undefined) {
                                         this.videoMixerEnabled = vmEnabled.enable === 1
+                                        mpsConnected = true
                                 }
 
                                 if (this.videoMixerEnabled) {
@@ -162,6 +165,7 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                         this.licenseData = licenseResponse.LicenseData
                                         const licenseVariables = updateLicenseVariables(this.licenseData)
                                         this.setVariableValues(licenseVariables)
+                                        mpsConnected = true
                                 }
                         }
 
@@ -174,11 +178,17 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                                         this.autoTrackingStates.set(cameraId, response)
                                                         const variables = updateVariablesFromAutoTracking(cameraId, response)
                                                         this.setVariableValues(variables)
+                                                        mpsConnected = true
                                                 }
                                         } catch {
                                                 this.log('debug', `Failed to poll Auto Tracking camera ${cameraId}`)
                                         }
                                 }
+                        }
+
+                        if (mpsConnected) {
+                                this.consecutiveErrors = 0
+                                this.updateStatus(InstanceStatus.Ok)
                         }
 
                         this.checkFeedbacks()
