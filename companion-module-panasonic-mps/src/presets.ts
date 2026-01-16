@@ -464,7 +464,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                 {
                                         down: [
                                                 {
-                                                        actionId: 'vmSetPgmCell',
+                                                        actionId: 'vmSwitchPgm',
                                                         options: { cell: cell },
                                                 },
                                         ],
@@ -472,89 +472,6 @@ export function getPresets(): CompanionPresetDefinitions {
                                 },
                         ],
                 }
-        }
-
-        for (let layout = 1; layout <= 4; layout++) {
-                presets[`vm_layout_${layout}`] = {
-                        type: 'button',
-                        category: 'Video Mixer',
-                        name: `Layout ${layout}`,
-                        style: {
-                                text: `LAYOUT\\n${layout}`,
-                                size: 'auto',
-                                color: combineRgb(255, 255, 255),
-                                bgcolor: combineRgb(51, 51, 102),
-                        },
-                        feedbacks: [],
-                        steps: [
-                                {
-                                        down: [
-                                                {
-                                                        actionId: 'vmSetLayout',
-                                                        options: { layout: layout },
-                                                },
-                                        ],
-                                        up: [],
-                                },
-                        ],
-                }
-        }
-
-        presets['vm_enable'] = {
-                type: 'button',
-                category: 'Video Mixer',
-                name: 'VM Enable',
-                style: {
-                        text: 'VM\\nENABLE',
-                        size: 'auto',
-                        color: combineRgb(255, 255, 255),
-                        bgcolor: combineRgb(51, 51, 51),
-                },
-                feedbacks: [
-                        {
-                                feedbackId: 'vmEnabled',
-                                options: {},
-                                style: {
-                                        bgcolor: combineRgb(0, 153, 0),
-                                        color: combineRgb(255, 255, 255),
-                                },
-                        },
-                ],
-                steps: [
-                        {
-                                down: [
-                                        {
-                                                actionId: 'vmSetEnable',
-                                                options: { enable: 1 },
-                                        },
-                                ],
-                                up: [],
-                        },
-                ],
-        }
-
-        presets['vm_disable'] = {
-                type: 'button',
-                category: 'Video Mixer',
-                name: 'VM Disable',
-                style: {
-                        text: 'VM\\nDISABLE',
-                        size: 'auto',
-                        color: combineRgb(255, 255, 255),
-                        bgcolor: combineRgb(102, 0, 0),
-                },
-                feedbacks: [],
-                steps: [
-                        {
-                                down: [
-                                        {
-                                                actionId: 'vmSetEnable',
-                                                options: { enable: 0 },
-                                        },
-                                ],
-                                up: [],
-                        },
-                ],
         }
 
         presets['vm_dsk_on'] = {
@@ -572,8 +489,8 @@ export function getPresets(): CompanionPresetDefinitions {
                         {
                                 down: [
                                         {
-                                                actionId: 'vmSetDsk',
-                                                options: { enable: 1 },
+                                                actionId: 'vmDsk',
+                                                options: { control: 1 },
                                         },
                                 ],
                                 up: [],
@@ -596,8 +513,8 @@ export function getPresets(): CompanionPresetDefinitions {
                         {
                                 down: [
                                         {
-                                                actionId: 'vmSetDsk',
-                                                options: { enable: 0 },
+                                                actionId: 'vmDsk',
+                                                options: { control: 0 },
                                         },
                                 ],
                                 up: [],
@@ -605,23 +522,32 @@ export function getPresets(): CompanionPresetDefinitions {
                 ],
         }
 
-        presets['vm_fade_out_black'] = {
+        presets['vm_get_status'] = {
                 type: 'button',
                 category: 'Video Mixer',
-                name: 'Fade to Black',
+                name: 'Get VM Status',
                 style: {
-                        text: 'FADE\\nBLACK',
+                        text: 'VM\\nSTATUS',
                         size: 'auto',
                         color: combineRgb(255, 255, 255),
-                        bgcolor: combineRgb(0, 0, 0),
+                        bgcolor: combineRgb(51, 51, 51),
                 },
-                feedbacks: [],
+                feedbacks: [
+                        {
+                                feedbackId: 'vmEnabled',
+                                options: {},
+                                style: {
+                                        bgcolor: combineRgb(0, 153, 0),
+                                        color: combineRgb(255, 255, 255),
+                                },
+                        },
+                ],
                 steps: [
                         {
                                 down: [
                                         {
-                                                actionId: 'vmFadeOut',
-                                                options: { color: 0 },
+                                                actionId: 'vmGetVmEnableStatus',
+                                                options: {},
                                         },
                                 ],
                                 up: [],
@@ -629,23 +555,23 @@ export function getPresets(): CompanionPresetDefinitions {
                 ],
         }
 
-        presets['vm_fade_out_white'] = {
+        presets['vm_get_layout'] = {
                 type: 'button',
                 category: 'Video Mixer',
-                name: 'Fade to White',
+                name: 'Get Layout',
                 style: {
-                        text: 'FADE\\nWHITE',
+                        text: 'GET\\nLAYOUT',
                         size: 'auto',
-                        color: combineRgb(0, 0, 0),
-                        bgcolor: combineRgb(255, 255, 255),
+                        color: combineRgb(255, 255, 255),
+                        bgcolor: combineRgb(51, 51, 102),
                 },
                 feedbacks: [],
                 steps: [
                         {
                                 down: [
                                         {
-                                                actionId: 'vmFadeOut',
-                                                options: { color: 1 },
+                                                actionId: 'vmGetMultiViewLayout',
+                                                options: {},
                                         },
                                 ],
                                 up: [],
@@ -653,12 +579,37 @@ export function getPresets(): CompanionPresetDefinitions {
                 ],
         }
 
-        presets['vm_fade_in'] = {
+        presets['vm_screenshot_pgm'] = {
                 type: 'button',
                 category: 'Video Mixer',
-                name: 'Fade In',
+                name: 'Screenshot PGM',
                 style: {
-                        text: 'FADE\\nIN',
+                        text: 'SCREEN\\nSHOT',
+                        size: 'auto',
+                        color: combineRgb(255, 255, 255),
+                        bgcolor: combineRgb(102, 51, 0),
+                },
+                feedbacks: [],
+                steps: [
+                        {
+                                down: [
+                                        {
+                                                actionId: 'vmCaptureScreenshot',
+                                                options: { control: 1 },
+                                        },
+                                ],
+                                up: [],
+                        },
+                ],
+        }
+
+        // Volume presets
+        presets['vm_volume_100'] = {
+                type: 'button',
+                category: 'Video Mixer',
+                name: 'Volume 100%',
+                style: {
+                        text: 'VOL\\n100%',
                         size: 'auto',
                         color: combineRgb(255, 255, 255),
                         bgcolor: combineRgb(0, 102, 0),
@@ -668,8 +619,32 @@ export function getPresets(): CompanionPresetDefinitions {
                         {
                                 down: [
                                         {
-                                                actionId: 'vmFadeIn',
-                                                options: {},
+                                                actionId: 'vmControlVolume',
+                                                options: { volume: 100 },
+                                        },
+                                ],
+                                up: [],
+                        },
+                ],
+        }
+
+        presets['vm_volume_0'] = {
+                type: 'button',
+                category: 'Video Mixer',
+                name: 'Volume 0% (Mute)',
+                style: {
+                        text: 'VOL\\nMUTE',
+                        size: 'auto',
+                        color: combineRgb(255, 255, 255),
+                        bgcolor: combineRgb(102, 0, 0),
+                },
+                feedbacks: [],
+                steps: [
+                        {
+                                down: [
+                                        {
+                                                actionId: 'vmControlVolume',
+                                                options: { volume: 0 },
                                         },
                                 ],
                                 up: [],
@@ -679,12 +654,12 @@ export function getPresets(): CompanionPresetDefinitions {
 
         // Auto Tracking Presets (cameras 1-4)
         for (let cam = 1; cam <= 4; cam++) {
-                presets[`at_cam${cam}_enable`] = {
+                presets[`at_cam${cam}_start`] = {
                         type: 'button',
                         category: 'Auto Tracking',
-                        name: `AT Cam ${cam} Enable`,
+                        name: `AT Cam ${cam} Start`,
                         style: {
-                                text: `AT${cam}\\nENABLE`,
+                                text: `AT${cam}\\nSTART`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
                                 bgcolor: combineRgb(51, 51, 51),
@@ -703,8 +678,8 @@ export function getPresets(): CompanionPresetDefinitions {
                                 {
                                         down: [
                                                 {
-                                                        actionId: 'atSetEnable',
-                                                        options: { camera_id: cam, enable: 1 },
+                                                        actionId: 'atCameraControl',
+                                                        options: { camera_id: cam, control: 'start' },
                                                 },
                                         ],
                                         up: [],
@@ -712,12 +687,12 @@ export function getPresets(): CompanionPresetDefinitions {
                         ],
                 }
 
-                presets[`at_cam${cam}_disable`] = {
+                presets[`at_cam${cam}_stop`] = {
                         type: 'button',
                         category: 'Auto Tracking',
-                        name: `AT Cam ${cam} Disable`,
+                        name: `AT Cam ${cam} Stop`,
                         style: {
-                                text: `AT${cam}\\nDISABLE`,
+                                text: `AT${cam}\\nSTOP`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
                                 bgcolor: combineRgb(102, 0, 0),
@@ -727,8 +702,8 @@ export function getPresets(): CompanionPresetDefinitions {
                                 {
                                         down: [
                                                 {
-                                                        actionId: 'atSetEnable',
-                                                        options: { camera_id: cam, enable: 0 },
+                                                        actionId: 'atCameraControl',
+                                                        options: { camera_id: cam, control: 'stop' },
                                                 },
                                         ],
                                         up: [],
@@ -736,32 +711,23 @@ export function getPresets(): CompanionPresetDefinitions {
                         ],
                 }
 
-                presets[`at_cam${cam}_lock`] = {
+                presets[`at_cam${cam}_tracking_start`] = {
                         type: 'button',
                         category: 'Auto Tracking',
-                        name: `AT Cam ${cam} Lock`,
+                        name: `AT Cam ${cam} Tracking Start`,
                         style: {
-                                text: `AT${cam}\\nLOCK`,
+                                text: `AT${cam}\\nTRACK`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
-                                bgcolor: combineRgb(51, 51, 51),
+                                bgcolor: combineRgb(0, 102, 51),
                         },
-                        feedbacks: [
-                                {
-                                        feedbackId: 'atLocked',
-                                        options: { camera_id: cam },
-                                        style: {
-                                                bgcolor: combineRgb(204, 153, 0),
-                                                color: combineRgb(0, 0, 0),
-                                        },
-                                },
-                        ],
+                        feedbacks: [],
                         steps: [
                                 {
                                         down: [
                                                 {
-                                                        actionId: 'atSetLock',
-                                                        options: { camera_id: cam, lock: 1 },
+                                                        actionId: 'atTracking',
+                                                        options: { camera_id: cam, process: 'start' },
                                                 },
                                         ],
                                         up: [],
@@ -769,12 +735,12 @@ export function getPresets(): CompanionPresetDefinitions {
                         ],
                 }
 
-                presets[`at_cam${cam}_unlock`] = {
+                presets[`at_cam${cam}_get_state`] = {
                         type: 'button',
                         category: 'Auto Tracking',
-                        name: `AT Cam ${cam} Unlock`,
+                        name: `AT Cam ${cam} Get State`,
                         style: {
-                                text: `AT${cam}\\nUNLOCK`,
+                                text: `AT${cam}\\nSTATE`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
                                 bgcolor: combineRgb(51, 51, 51),
@@ -784,8 +750,8 @@ export function getPresets(): CompanionPresetDefinitions {
                                 {
                                         down: [
                                                 {
-                                                        actionId: 'atSetLock',
-                                                        options: { camera_id: cam, lock: 0 },
+                                                        actionId: 'atCameraState',
+                                                        options: { camera_id: cam },
                                                 },
                                         ],
                                         up: [],
@@ -810,8 +776,8 @@ export function getPresets(): CompanionPresetDefinitions {
                                         {
                                                 down: [
                                                         {
-                                                                actionId: 'atPresetExec',
-                                                                options: { camera_id: cam, preset_num: preset },
+                                                                actionId: 'atPreset',
+                                                                options: { camera_id: cam, mode: 'recall', preset_num: preset },
                                                         },
                                                 ],
                                                 up: [],
@@ -837,7 +803,7 @@ export function getPresets(): CompanionPresetDefinitions {
                         {
                                 down: [
                                         {
-                                                actionId: 'licenseGetData',
+                                                actionId: 'getLicenseData',
                                                 options: {},
                                         },
                                 ],
