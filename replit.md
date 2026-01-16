@@ -1,8 +1,8 @@
-# Panasonic Auto Framing Control System
+# Panasonic Media Production Suite Control System
 
 ## Overview
 
-This project is a professional broadcast control application for managing Panasonic Media Production Suite Auto Framing Plugin. It consists of two main components:
+This project is a professional broadcast control application for managing the complete Panasonic Media Production Suite including Auto Framing Plugin, Auto Tracking Plugin, Video Mixer Plugin, and License API. It consists of two main components:
 
 1. **Web Application** - A React-based control interface for camera management and monitoring
 2. **Bitfocus Companion Module** - A standalone module for hardware controller integration
@@ -40,11 +40,15 @@ The server handles API routes and serves the static frontend in production. Deve
 - **Development Storage**: In-memory storage implementation available for testing
 
 ### Companion Module Architecture
-The `companion-module-panasonic-autoframing` subdirectory contains a standalone Bitfocus Companion module:
+The `companion-module-panasonic-mps` subdirectory contains a standalone Bitfocus Companion module:
 - **API Version**: Companion Module Base v1.11
-- **Runtime**: Node.js 22
-- **Features**: 30+ actions, feedbacks, variables, and presets for camera control
-- **Communication**: HTTP/HTTPS to Panasonic Auto Framing Plugin Web API v1.11.1
+- **Runtime**: Node.js 18+
+- **Features**: 60+ actions, 15 feedbacks, 150+ variables for comprehensive control
+- **Communication**: HTTP to four Panasonic APIs:
+  - Auto Framing Plugin (port 1338) - 15 commands
+  - Auto Tracking Plugin (port 1337) - 8 commands
+  - Video Mixer Plugin (port 1337) - 11 commands
+  - License API (port 1337) - 1 command
 
 ## External Dependencies
 
@@ -53,7 +57,9 @@ The `companion-module-panasonic-autoframing` subdirectory contains a standalone 
 - Drizzle ORM for type-safe database operations
 
 ### Third-Party Services
-- **Panasonic Auto Framing Plugin**: Web API endpoint for camera control (default port 1338)
+- **Panasonic Media Production Suite**: Web APIs for camera and video control
+  - Auto Framing Plugin (port 1338)
+  - Auto Tracking, Video Mixer, License APIs (port 1337)
 - **Bitfocus Companion**: External control surface software that loads the companion module
 
 ### Key NPM Packages
