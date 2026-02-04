@@ -762,6 +762,16 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         default: 1,
                                 },
                                 {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 'relative', label: 'Relative' },
+                                                { id: 'absolute', label: 'Absolute' },
+                                        ],
+                                        default: 'relative',
+                                },
+                                {
                                         type: 'number',
                                         id: 'amount',
                                         label: 'Amount (1-100)',
@@ -772,8 +782,9 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                         ],
                         callback: async (action) => {
                                 const cameraId = Number(action.options.camera_id)
-                                const amount = -Math.abs(Number(action.options.amount))
-                                await instance.api?.currentFrame(cameraId, 'relative', { target_x: amount })
+                                const mode = String(action.options.mode) as 'relative' | 'absolute'
+                                const amount = mode === 'relative' ? -Math.abs(Number(action.options.amount)) : Number(action.options.amount)
+                                await instance.api?.currentFrame(cameraId, mode, { target_x: amount })
                         },
                 },
 
@@ -789,6 +800,16 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         default: 1,
                                 },
                                 {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 'relative', label: 'Relative' },
+                                                { id: 'absolute', label: 'Absolute' },
+                                        ],
+                                        default: 'relative',
+                                },
+                                {
                                         type: 'number',
                                         id: 'amount',
                                         label: 'Amount (1-100)',
@@ -799,8 +820,9 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                         ],
                         callback: async (action) => {
                                 const cameraId = Number(action.options.camera_id)
+                                const mode = String(action.options.mode) as 'relative' | 'absolute'
                                 const amount = Math.abs(Number(action.options.amount))
-                                await instance.api?.currentFrame(cameraId, 'relative', { target_x: amount })
+                                await instance.api?.currentFrame(cameraId, mode, { target_x: amount })
                         },
                 },
 
@@ -816,6 +838,16 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         default: 1,
                                 },
                                 {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 'relative', label: 'Relative' },
+                                                { id: 'absolute', label: 'Absolute' },
+                                        ],
+                                        default: 'relative',
+                                },
+                                {
                                         type: 'number',
                                         id: 'amount',
                                         label: 'Amount (1-100)',
@@ -826,8 +858,9 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                         ],
                         callback: async (action) => {
                                 const cameraId = Number(action.options.camera_id)
-                                const amount = -Math.abs(Number(action.options.amount))
-                                await instance.api?.currentFrame(cameraId, 'relative', { target_y: amount })
+                                const mode = String(action.options.mode) as 'relative' | 'absolute'
+                                const amount = mode === 'relative' ? -Math.abs(Number(action.options.amount)) : Number(action.options.amount)
+                                await instance.api?.currentFrame(cameraId, mode, { target_y: amount })
                         },
                 },
 
@@ -843,6 +876,16 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         default: 1,
                                 },
                                 {
+                                        type: 'dropdown',
+                                        id: 'mode',
+                                        label: 'Mode',
+                                        choices: [
+                                                { id: 'relative', label: 'Relative' },
+                                                { id: 'absolute', label: 'Absolute' },
+                                        ],
+                                        default: 'relative',
+                                },
+                                {
                                         type: 'number',
                                         id: 'amount',
                                         label: 'Amount (1-100)',
@@ -853,8 +896,9 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                         ],
                         callback: async (action) => {
                                 const cameraId = Number(action.options.camera_id)
+                                const mode = String(action.options.mode) as 'relative' | 'absolute'
                                 const amount = Math.abs(Number(action.options.amount))
-                                await instance.api?.currentFrame(cameraId, 'relative', { target_y: amount })
+                                await instance.api?.currentFrame(cameraId, mode, { target_y: amount })
                         },
                 },
 
