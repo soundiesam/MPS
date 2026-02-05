@@ -257,7 +257,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panLeft',
-                                                        options: { camera_id: cam, amount: 10 },
+                                                        options: { camera_id: cam, mode: 'relative', amount: 10 },
                                                 },
                                         ],
                                         up: [],
@@ -281,7 +281,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panRight',
-                                                        options: { camera_id: cam, amount: 10 },
+                                                        options: { camera_id: cam, mode: 'relative', amount: 10 },
                                                 },
                                         ],
                                         up: [],
@@ -305,7 +305,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'tiltUp',
-                                                        options: { camera_id: cam, amount: 10 },
+                                                        options: { camera_id: cam, mode: 'relative', amount: 10 },
                                                 },
                                         ],
                                         up: [],
@@ -329,7 +329,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'tiltDown',
-                                                        options: { camera_id: cam, amount: 10 },
+                                                        options: { camera_id: cam, mode: 'relative', amount: 10 },
                                                 },
                                         ],
                                         up: [],
