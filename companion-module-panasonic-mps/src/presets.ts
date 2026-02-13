@@ -257,7 +257,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panLeft',
-										options: { camera_id: cam, mode: 'relative', target_x: -10, target_y: 0 },
+										options: { camera_id: cam, mode: 'relative', target_x: 10, target_y: 0 },
                                                 },
                                         ],
                                         up: [],
@@ -281,7 +281,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panRight',
-										options: { camera_id: cam, mode: 'relative', target_x: 10, target_y: 0 },
+										options: { camera_id: cam, mode: 'relative', target_x: -10, target_y: 0 },
                                                 },
                                         ],
                                         up: [],
