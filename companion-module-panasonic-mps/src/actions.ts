@@ -752,7 +752,7 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
 
                 panLeft: {
                         name: 'Pan Left',
-                        description: 'Pan the current frame left',
+                        description: 'Pan the current frame left (relative: -100~100 step, absolute: 0~1920 pixel)',
                         options: [
                                 {
                                         type: 'dropdown',
@@ -766,26 +766,26 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         id: 'mode',
                                         label: 'Mode',
                                         choices: [
-                                                { id: 'relative', label: 'Relative' },
-                                                { id: 'absolute', label: 'Absolute' },
+                                                { id: 'relative', label: 'Relative (-100~100)' },
+                                                { id: 'absolute', label: 'Absolute (0~1920x1080)' },
                                         ],
                                         default: 'relative',
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_x',
-                                        label: 'Target X (0-100)',
-                                        default: 100,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target X (relative: -100~100, absolute: 0~1920)',
+                                        default: -10,
+                                        min: -100,
+                                        max: 1920,
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_y',
-                                        label: 'Target Y (0-100)',
-                                        default: 50,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target Y (relative: -100~100, absolute: 0~1080)',
+                                        default: 0,
+                                        min: -100,
+                                        max: 1080,
                                 },
                         ],
                         callback: async (action) => {
@@ -799,7 +799,7 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
 
                 panRight: {
                         name: 'Pan Right',
-                        description: 'Pan the current frame right',
+                        description: 'Pan the current frame right (relative: -100~100 step, absolute: 0~1920 pixel)',
                         options: [
                                 {
                                         type: 'dropdown',
@@ -813,26 +813,26 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         id: 'mode',
                                         label: 'Mode',
                                         choices: [
-                                                { id: 'relative', label: 'Relative' },
-                                                { id: 'absolute', label: 'Absolute' },
+                                                { id: 'relative', label: 'Relative (-100~100)' },
+                                                { id: 'absolute', label: 'Absolute (0~1920x1080)' },
                                         ],
                                         default: 'relative',
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_x',
-                                        label: 'Target X (0-100)',
-                                        default: 100,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target X (relative: -100~100, absolute: 0~1920)',
+                                        default: 10,
+                                        min: -100,
+                                        max: 1920,
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_y',
-                                        label: 'Target Y (0-100)',
-                                        default: 50,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target Y (relative: -100~100, absolute: 0~1080)',
+                                        default: 0,
+                                        min: -100,
+                                        max: 1080,
                                 },
                         ],
                         callback: async (action) => {
@@ -846,7 +846,7 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
 
                 tiltUp: {
                         name: 'Tilt Up',
-                        description: 'Tilt the current frame up',
+                        description: 'Tilt the current frame up (relative: -100~100 step, absolute: 0~1080 pixel)',
                         options: [
                                 {
                                         type: 'dropdown',
@@ -860,26 +860,26 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         id: 'mode',
                                         label: 'Mode',
                                         choices: [
-                                                { id: 'relative', label: 'Relative' },
-                                                { id: 'absolute', label: 'Absolute' },
+                                                { id: 'relative', label: 'Relative (-100~100)' },
+                                                { id: 'absolute', label: 'Absolute (0~1920x1080)' },
                                         ],
                                         default: 'relative',
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_x',
-                                        label: 'Target X (0-100)',
-                                        default: 50,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target X (relative: -100~100, absolute: 0~1920)',
+                                        default: 0,
+                                        min: -100,
+                                        max: 1920,
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_y',
-                                        label: 'Target Y (0-100)',
-                                        default: 100,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target Y (relative: -100~100, absolute: 0~1080)',
+                                        default: -10,
+                                        min: -100,
+                                        max: 1080,
                                 },
                         ],
                         callback: async (action) => {
@@ -893,7 +893,7 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
 
                 tiltDown: {
                         name: 'Tilt Down',
-                        description: 'Tilt the current frame down',
+                        description: 'Tilt the current frame down (relative: -100~100 step, absolute: 0~1080 pixel)',
                         options: [
                                 {
                                         type: 'dropdown',
@@ -907,26 +907,26 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                                         id: 'mode',
                                         label: 'Mode',
                                         choices: [
-                                                { id: 'relative', label: 'Relative' },
-                                                { id: 'absolute', label: 'Absolute' },
+                                                { id: 'relative', label: 'Relative (-100~100)' },
+                                                { id: 'absolute', label: 'Absolute (0~1920x1080)' },
                                         ],
                                         default: 'relative',
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_x',
-                                        label: 'Target X (0-100)',
-                                        default: 50,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target X (relative: -100~100, absolute: 0~1920)',
+                                        default: 0,
+                                        min: -100,
+                                        max: 1920,
                                 },
                                 {
                                         type: 'number',
                                         id: 'target_y',
-                                        label: 'Target Y (0-100)',
-                                        default: 100,
-                                        min: 0,
-                                        max: 100,
+                                        label: 'Target Y (relative: -100~100, absolute: 0~1080)',
+                                        default: 10,
+                                        min: -100,
+                                        max: 1080,
                                 },
                         ],
                         callback: async (action) => {
