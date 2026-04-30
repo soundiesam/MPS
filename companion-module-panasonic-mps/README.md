@@ -41,6 +41,51 @@ yarn dev
 
 Files will automatically recompile on save.
 
+## Using in Companion (Development Mode)
+
+To test and use this module inside a running Companion instance during development:
+
+### 1. Build the module
+
+Make sure the module is compiled before loading it in Companion:
+
+```bash
+yarn build
+```
+
+Or keep the watcher running so changes are picked up automatically:
+
+```bash
+yarn dev
+```
+
+### 2. Add the module path in Companion
+
+1. Open the Companion web UI (default: `http://localhost:8000`)
+2. Go to **Settings** (bottom-left cog icon)
+3. Click the **Developer** tab
+4. Under **Developer modules path**, click the folder icon and select the root folder of this module (the folder that contains `package.json` and the `companion/` directory)
+5. Click **Save**
+
+Companion will now list **Panasonic Media Production Suite** as an available module type.
+
+### 3. Add a connection
+
+1. Go to **Connections** in Companion
+2. Click **+ Add connection**
+3. Search for **Panasonic MPS** and select it
+4. Enter the IP address of your Panasonic Media Production Suite host
+5. Click **Save** — the module will connect and begin polling status
+
+### 4. Iterate
+
+While `yarn dev` is running, any TypeScript changes are compiled automatically. To pick up changes in Companion:
+
+- Go to **Connections**, find the Panasonic MPS connection, and click the **reload** icon
+- Or disable and re-enable the connection to force a full restart
+
+> **Tip:** Open the Companion log viewer (Settings → Log) and set the level to **Debug** to see all API requests and polling output from this module.
+
 ## Features
 
 This module provides comprehensive control of the Panasonic Media Production Suite:
