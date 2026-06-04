@@ -1,90 +1,27 @@
 # companion-module-panasonic-mps
 
-Bitfocus Companion module for controlling **Panasonic Media Production Suite** including Auto Framing Plugin, Auto Tracking Plugin, Video Mixer Plugin, and License API.
+Bitfocus Companion module for controlling the **Panasonic Media Production Suite** including Auto Framing Plugin, Auto Tracking Plugin, Video Mixer Plugin, and License API.
 
 See [HELP.md](./companion/HELP.md) and [LICENSE](./LICENSE)
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
-- Node.js v18 or later (v22 recommended)
-- Yarn package manager
 - Bitfocus Companion v3.0 or later
+- Panasonic Media Production Suite running on your network (Auto Framing, Auto Tracking, and/or Video Mixer plugins)
 
 ### Installation
 
-1. Clone or download this module to your Companion development folder
-2. Install dependencies:
-
-```bash
-yarn install
-```
-
-### Building
-
-Build the module once:
-
-```bash
-yarn build
-```
-
-This compiles TypeScript to the `dist/` directory.
-
-### Development
-
-Run the compiler in watch mode:
-
-```bash
-yarn dev
-```
-
-Files will automatically recompile on save.
-
-## Using in Companion (Development Mode)
-
-To test and use this module inside a running Companion instance during development:
-
-### 1. Build the module
-
-Make sure the module is compiled before loading it in Companion:
-
-```bash
-yarn build
-```
-
-Or keep the watcher running so changes are picked up automatically:
-
-```bash
-yarn dev
-```
-
-### 2. Add the module path in Companion
+This module is available directly from the Companion module store — no manual installation required.
 
 1. Open the Companion web UI (default: `http://localhost:8000`)
-2. Go to **Settings** (bottom-left cog icon)
-3. Click the **Developer** tab
-4. Under **Developer modules path**, click the folder icon and select the root folder of this module (the folder that contains `package.json` and the `companion/` directory)
+2. Go to **Connections** and click **+ Add connection**
+3. Search for **Panasonic MPS** and select it
+4. Enter the **IP address** of the machine running the Panasonic Media Production Suite
 5. Click **Save**
 
-Companion will now list **Panasonic Media Production Suite** as an available module type.
-
-### 3. Add a connection
-
-1. Go to **Connections** in Companion
-2. Click **+ Add connection**
-3. Search for **Panasonic MPS** and select it
-4. Enter the IP address of your Panasonic Media Production Suite host
-5. Click **Save** — the module will connect and begin polling status
-
-### 4. Iterate
-
-While `yarn dev` is running, any TypeScript changes are compiled automatically. To pick up changes in Companion:
-
-- Go to **Connections**, find the Panasonic MPS connection, and click the **reload** icon
-- Or disable and re-enable the connection to force a full restart
-
-> **Tip:** Open the Companion log viewer (Settings → Log) and set the level to **Debug** to see all API requests and polling output from this module.
+The module will connect and begin monitoring your Panasonic system immediately.
 
 ## Features
 
@@ -148,7 +85,6 @@ GetLicenseData
 ## Compatibility
 
 - **Companion**: v3.0+
-- **Node.js**: v18+ (v22 recommended)
 - **Panasonic Software**: Media Production Suite with Auto Framing, Auto Tracking, and Video Mixer Plugins
 
 ## License
