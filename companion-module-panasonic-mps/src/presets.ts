@@ -257,7 +257,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panLeft',
-										options: { camera_id: cam, mode: 'relative', target_x: 10, target_y: 0 },
+                                                                                options: { camera_id: cam, mode: 'relative', target_x: 10, target_y: 0 },
                                                 },
                                         ],
                                         up: [],
@@ -281,7 +281,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'panRight',
-										options: { camera_id: cam, mode: 'relative', target_x: -10, target_y: 0 },
+                                                                                options: { camera_id: cam, mode: 'relative', target_x: -10, target_y: 0 },
                                                 },
                                         ],
                                         up: [],
@@ -305,7 +305,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'tiltUp',
-										options: { camera_id: cam, mode: 'relative', target_x: 0, target_y: -10 },
+                                                                                options: { camera_id: cam, mode: 'relative', target_x: 0, target_y: -10 },
                                                 },
                                         ],
                                         up: [],
@@ -329,7 +329,7 @@ export function getPresets(): CompanionPresetDefinitions {
                                         down: [
                                                 {
                                                         actionId: 'tiltDown',
-										options: { camera_id: cam, mode: 'relative', target_x: 0, target_y: 10 },
+                                                                                options: { camera_id: cam, mode: 'relative', target_x: 0, target_y: 10 },
                                                 },
                                         ],
                                         up: [],
@@ -735,81 +735,6 @@ export function getPresets(): CompanionPresetDefinitions {
                         ],
                 }
 
-                presets[`at_cam${cam}_get_state`] = {
-                        type: 'button',
-                        category: 'Auto Tracking',
-                        name: `AT Cam ${cam} Get State`,
-                        style: {
-                                text: `AT${cam}\\nSTATE`,
-                                size: 'auto',
-                                color: combineRgb(255, 255, 255),
-                                bgcolor: combineRgb(51, 51, 51),
-                        },
-                        feedbacks: [],
-                        steps: [
-                                {
-                                        down: [
-                                                {
-                                                        actionId: 'atCameraState',
-                                                        options: { camera_id: cam },
-                                                },
-                                        ],
-                                        up: [],
-                                },
-                        ],
-                }
-
-                // Auto Tracking presets 1-5
-                for (let preset = 1; preset <= 5; preset++) {
-                        presets[`at_cam${cam}_preset${preset}`] = {
-                                type: 'button',
-                                category: 'Auto Tracking',
-                                name: `AT Cam ${cam} Preset ${preset}`,
-                                style: {
-                                        text: `AT${cam}\\nP${preset}`,
-                                        size: 'auto',
-                                        color: combineRgb(255, 255, 255),
-                                        bgcolor: combineRgb(102, 51, 102),
-                                },
-                                feedbacks: [],
-                                steps: [
-                                        {
-                                                down: [
-                                                        {
-                                                                actionId: 'atPreset',
-                                                                options: { camera_id: cam, mode: 'recall', preset_num: preset },
-                                                        },
-                                                ],
-                                                up: [],
-                                        },
-                                ],
-                        }
-                }
-        }
-
-        // License preset
-        presets['license_refresh'] = {
-                type: 'button',
-                category: 'License',
-                name: 'Refresh License',
-                style: {
-                        text: 'LICENSE\\nREFRESH',
-                        size: 'auto',
-                        color: combineRgb(255, 255, 255),
-                        bgcolor: combineRgb(51, 51, 51),
-                },
-                feedbacks: [],
-                steps: [
-                        {
-                                down: [
-                                        {
-                                                actionId: 'getLicenseData',
-                                                options: {},
-                                        },
-                                ],
-                                up: [],
-                        },
-                ],
         }
 
         return presets
