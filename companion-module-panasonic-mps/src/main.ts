@@ -12,7 +12,7 @@ import { VideoMixerApi } from './video-mixer-api.js'
 import { getActions } from './actions.js'
 import { getFeedbacks } from './feedbacks.js'
 import { getPresets } from './presets.js'
-import { getVariableDefinitions, updateVariablesFromState, updateVariablesFromAutoTracking, updateVideoMixerVariables, updateLicenseVariables } from './variables.js'
+import { getVariableDefinitions, updateVariablesFromState, updateVariablesFromAutoTracking, updateVideoMixerVariables } from './variables.js'
 
 export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
         public config: ModuleConfig = {
@@ -169,8 +169,6 @@ export class PanasonicAutoFramingInstance extends InstanceBase<ModuleConfig> {
                                 const licenseResponse = await this.licenseApi.getLicenseData()
                                 if (licenseResponse.Response === 'ack' && licenseResponse.LicenseData) {
                                         this.licenseData = licenseResponse.LicenseData
-                                        const licenseVariables = updateLicenseVariables(this.licenseData)
-                                        this.setVariableValues(licenseVariables)
                                         mpsConnected = true
                                 }
                         }
