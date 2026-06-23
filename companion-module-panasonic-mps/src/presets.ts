@@ -64,9 +64,9 @@ export function getPresets(): CompanionPresetDefinitions {
                 presets[`cam${cam}_start`] = {
                         type: 'button',
                         category: `Camera ${cam}`,
-                        name: `Start Tracking`,
+                        name: `Framing Start`,
                         style: {
-                                text: `CAM${cam}\\nSTART`,
+                                text: `CAM${cam}\\nFRAME\\nSTART`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
                                 bgcolor: combineRgb(0, 102, 0),
@@ -97,9 +97,9 @@ export function getPresets(): CompanionPresetDefinitions {
                 presets[`cam${cam}_stop`] = {
                         type: 'button',
                         category: `Camera ${cam}`,
-                        name: `Stop Tracking`,
+                        name: `Framing Stop`,
                         style: {
-                                text: `CAM${cam}\\nSTOP`,
+                                text: `CAM${cam}\\nFRAME\\nSTOP`,
                                 size: 'auto',
                                 color: combineRgb(255, 255, 255),
                                 bgcolor: combineRgb(102, 0, 0),
