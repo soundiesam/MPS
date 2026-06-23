@@ -1546,23 +1546,5 @@ export function getActions(instance: PanasonicAutoFramingInstance): CompanionAct
                         },
                 },
 
-                vmGetVmEnableStatus: {
-                        name: 'Video Mixer: Get Enable Status',
-                        description: 'Get Video Mixer enable status',
-                        options: [],
-                        callback: async () => {
-                                if (!instance.videoMixerApi) return
-                                try {
-                                        const response = await instance.videoMixerApi.getVmEnableStatus()
-                                        if (response.resp === 'ack' && response.enable !== undefined) {
-                                                instance.videoMixerEnabled = response.enable === 1
-                                                instance.log('info', `Video Mixer Enabled: ${instance.videoMixerEnabled}`)
-                                                instance.checkFeedbacks()
-                                        }
-                                } catch (error) {
-                                        instance.log('error', `Failed to get VM status: ${error}`)
-                                }
-                        },
-                },
         }
 }

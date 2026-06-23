@@ -522,39 +522,6 @@ export function getPresets(): CompanionPresetDefinitions {
                 ],
         }
 
-        presets['vm_get_status'] = {
-                type: 'button',
-                category: 'Video Mixer',
-                name: 'Get VM Status',
-                style: {
-                        text: 'VM\\nSTATUS',
-                        size: 'auto',
-                        color: combineRgb(255, 255, 255),
-                        bgcolor: combineRgb(51, 51, 51),
-                },
-                feedbacks: [
-                        {
-                                feedbackId: 'vmEnabled',
-                                options: {},
-                                style: {
-                                        bgcolor: combineRgb(0, 153, 0),
-                                        color: combineRgb(255, 255, 255),
-                                },
-                        },
-                ],
-                steps: [
-                        {
-                                down: [
-                                        {
-                                                actionId: 'vmGetVmEnableStatus',
-                                                options: {},
-                                        },
-                                ],
-                                up: [],
-                        },
-                ],
-        }
-
         presets['vm_get_layout'] = {
                 type: 'button',
                 category: 'Video Mixer',
